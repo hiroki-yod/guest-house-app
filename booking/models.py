@@ -3,10 +3,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-class CommonUser(AbstractUser):
-    uid = models.UUIDField(editable=False, default=uuid.uuid4)
 
-    REQUIRED_FIELDS = ["uid"]
+class CommonUser(AbstractUser):
+    uid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    birth_date = models.DateField()
+
+    REQUIRED_FIELDS = ['uid', 'birth_date']
 
     def __str__(self):
         return self.username
@@ -16,26 +18,16 @@ class CommonUser(AbstractUser):
 
 
 class HostUser(CommonUser):
-    display_name = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='images/')
-    bio = models.CharField(max_length=400, blank=True)
-    website = models.URLField(blank=True)
-
     def __str__(self):
-        return self.display_name
+        return self.username
 
     class Meta:
         verbose_name = ('HostUser')
 
 
 class GuestUser(CommonUser):
-    display_name = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='images/')
-    bio = models.CharField(max_length=400, blank=True)
-    website = models.URLField(blank=True)
-
     def __str__(self):
-        return self.display_name
+        return self.username
 
     class Meta:
         verbose_name = ('GuestUser')
@@ -46,6 +38,9 @@ class Facility(models.Model):
     name = models.CharField(max_length=100)
     post_code = models.CharField(max_length=7)
     address = models.CharField(max_length=200)
+    photo = models.ImageField(upload_to='images/')
+    bio = models.CharField(max_length=400, blank=True)
+    website = models.URLField(blank=True)
     host = models.ForeignKey(to=HostUser, on_delete=models.DO_NOTHING)
 
     def __str__(self):
@@ -53,7 +48,8 @@ class Facility(models.Model):
 
 
 class Room(models.Model):
-    room_id = models.PositiveSmallIntegerField()    #後でnameに変更
+    room_name = models.CharField(max_length=100)
+    capacity = models.SmallIntegerField()
     facility = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
 
     def __str__(self):
