@@ -32,7 +32,7 @@ class signup_guest(View):
         return redirect('/login')
 
 
-class login(View):
+class login_common(View):
 
     def get(self, request):
         form = auth.LoginForm()
@@ -46,9 +46,10 @@ class login(View):
             if user:
                 login(request, user)
                 return redirect('/')
+        return redirect('/login')
 
 
-class logout(View):
+class logout_common(View):
     def get(self, request):
         logout(request)
         return redirect('/')
