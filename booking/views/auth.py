@@ -45,7 +45,7 @@ class login(View):
             user = form.get_user()
             if user:
                 login(request, user)
-        return redirect('/')
+                return redirect('/')
 
 
 class logout(View):
