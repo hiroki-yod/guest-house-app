@@ -27,7 +27,7 @@ class reserve_frame_index(View):
         try:
             selected_facility = Facility.objects.get(pk=selected_facility_id)
             rooms = Room.objects.filter(facility_id=selected_facility_id)
-            reservation_frames = ReservationFrame.objects.filter(room_id__in = rooms).order_by("date")
+            reservation_frames = ReservationFrame.objects.filter(is_reserved = 0).filter(room_id__in = rooms).order_by("date")
             available_dates = reservation_frames.distinct().values_list('date')
 
             #availableDatesの要素availableDateはtupple配列になっており、availableDate[0]としないとdatetime型で取り出せない。これは不便なので修正しておく
