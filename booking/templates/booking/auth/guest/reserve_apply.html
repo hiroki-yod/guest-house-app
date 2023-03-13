@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>make reservation</title>
+</head>
+<body>
+    <h1>予約する</h1>
+    <form action="reservation/save/{{selected_reservation.id}}" method="post">
+        {% csrf_token %}
+        <p>施設名：{{facility.name}}<p>
+        <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly></p>
+        <p>チェックアウト日：<input type = "date" name="checkin" min =  "{{ selected_date }}" max={{deadline}}></p>
+        <button type="submit">予約を確定する(未実装)</button>
+    </form>
+</body>
+</html>

@@ -18,5 +18,6 @@ urlpatterns = [
     path('facility/index', guest.facility_index.as_view(), name='facility_index'),
     path('facility/<uuid:facility_id>/', guest.facility_detail.as_view(), name='facility_detail'),
     path('reserve/<uuid:selected_facility_id>/frame/index', guest.reserve_frame_index.as_view(), name='reserve_frame_index'),
+    path('reserve/<uuid:selected_facility_id>/<int:selected_frame_id>', guest.reserve_frame_apply.as_view(), name='reserve_frame_apply'),
 
 ]

@@ -10,10 +10,10 @@
     <p>{{facility.name}}</p>
 
     <div>
-    <h2>利用可能な予約枠</h2>
+    <h2>利用可能な予約枠(チェックイン日から選ぶ)</h2>
         {% for available_frame in available_frames %}
             <li>{{available_frame.date}} (空き部屋数：{{available_frame.number}})
-                <a href = "/facility/{{facility.uid}}">予約する(未実装)</a>
+                <a href = '/reserve/{{facility.uid}}/{{available_frame.first_frame_id}}'>予約する(未実装)</a>
             </li>
         {% endfor %}
     </div>

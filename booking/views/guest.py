@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from booking.forms import auth
 from ..models import Facility, ReservationFrame, Room
+import datetime
 
 class facility_index(View):
     def get(self, request):
@@ -41,10 +42,12 @@ class reserve_frame_index(View):
             for available_date in available_date_lists:
                 capacity_list.append(reservation_frames.filter(date = available_date).count())
 
-            #available_date_listsとcapacity_listを結合する
+            #available_date_listsとcapacity_listを結合する。一応対応する予約枠のidもつけておく(実装に応じて要変更)
             available_frames = []
             for i in range(len(capacity_list)):
-                available_frames.append({"date":available_date_lists[i],"number":capacity_list[i]})
+                first_frame = ReservationFrame.objects.filter(is_reserved = 0).filter(room_id__in = rooms).filter(date = available_date_lists[i]).first()
+                available_frames.append({"date":available_date_lists[i],"number":capacity_list[i], \
+                                         "first_frame_id":first_frame.id})
 
             
             param = {
@@ -55,3 +58,24 @@ class reserve_frame_index(View):
         except selected_facility.DoesNotExist:
             raise Http404("Facility does not exist")
         return render(request, "booking/auth/guest/reserve_frame.html", param)
+
+#チェックイン先のfacilityとチェックイン日付(リンク生成の都合上reservation_frameで渡している)が与えられたとき、チェックアウト可能な最も遅い日付をdeadlineに格納する。
+#チェックアウト可能な最も遅い日付 == チェックイン日付から、利用可能なreservation_frameが連続的に確保できる日付
+#while文を与えているので、雑に編集すると無限ループの可能性があるので注意。
+class reserve_frame_apply(View):
+    def get(self, request, selected_facility_id, selected_frame_id):
+        if ReservationFrame.objects.filter(is_reserved = 0).filter(pk=selected_frame_id).exists():
+            selected_reservation = ReservationFrame.objects.filter(is_reserved = 0).filter(pk=selected_frame_id).get()
+            deadline = ReservationFrame.objects.filter(is_reserved = 0).filter(pk=selected_frame_id).first().date
+            rooms = Room.objects.filter(facility_id=selected_facility_id)
+            while ReservationFrame.objects.filter(is_reserved = 0).filter(room_id__in = rooms).filter(date__gt=deadline).exists():
+                deadline = deadline + datetime.timedelta(days=1)
+                print(deadline)
+            param = {'selected_reservation': selected_reservation,
+                     'facility' : Facility.objects.get(pk=selected_facility_id), 
+                     'selected_date':selected_reservation.date.isoformat(), 
+                     'deadline':deadline.isoformat()}
+            return render(request, 'booking/auth/guest/reserve_apply.html', param)
+        else:
+            return HttpResponse("空いている予約枠がありません。")
+        
