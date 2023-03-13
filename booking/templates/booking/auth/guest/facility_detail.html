@@ -7,21 +7,21 @@
 </head>
 <body>
     <h1>facility detail</h1>
-    <dev>
+    <div>
         <h2>name: {{ facility.name }}</h2>
-        <dev>
+        <div>
             <p>address:</p>
             <p>〒 {{ facility.post_code }}</p>
             <p>{{ facility.address }}</p>
-        </dev>
-        <dev>
+        </div>
+        <div>
             <p>{{ facility.photo }}</p>
-        </dev>
+        </div>
         <h3>{{ facility.bio }}</h3>
         
         <p>link: {{ facility.website }}</p>
-    </dev>
-    <p><a href="/facility/index">予約する(未実装)</a></p>
+    </div>
+    <p><a href="/reserve/{{facility.uid}}/frame/index">施設予約に進む</a></p>
     <p><a href="/facility/index">戻る</a></p>
 </body>
 </html>

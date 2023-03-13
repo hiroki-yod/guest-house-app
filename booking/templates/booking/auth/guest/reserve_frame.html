@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>facility date</title>
+</head>
+<body>
+    <h1>施設詳細</h1>
+    <p>リレーションで施設の概要をとってくる</p>
+
+    <div>
+    <h2>利用可能な予約枠</h2>
+        {% for frame in available_frames %}
+            <li>{{ frame.date }}</a></li>
+            <li>リレーションで部屋の概要をとってくる</a></li>
+            <a>予約する</a>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
