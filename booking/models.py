@@ -49,11 +49,10 @@ class Facility(models.Model):
 
 class Room(models.Model):
     room_name = models.CharField(max_length=100)
-    capacity = models.SmallIntegerField()
     facility = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.facility.name + '_' + str(self.room_id)
+        return self.facility.name + '_' + self.room_name
 
 
 class ReservationFrame(models.Model):
@@ -62,7 +61,7 @@ class ReservationFrame(models.Model):
     room = models.ForeignKey(to=Room, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return str(self.date) + '_' + self.room.facility.name + '_' + str(self.room.room_id)
+        return str(self.date) + '_' + self.room.facility.name + '_' + self.room.room_name
 
 
 class Reservation(models.Model):
@@ -74,4 +73,4 @@ class Reservation(models.Model):
     room = models.ForeignKey(to=Room, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return str(self.check_in_date) + '_' + self.room.facility.name + '_' + self.guest.display_name
+        return str(self.check_in_date) + '_' + self.room.facility.name + '_' + self.guest.username
