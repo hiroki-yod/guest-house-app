@@ -7,14 +7,14 @@
 </head>
 <body>
     <h1>施設詳細</h1>
-    <p>リレーションで施設の概要をとってくる</p>
+    <p>{{facility.name}}</p>
 
     <div>
     <h2>利用可能な予約枠</h2>
-        {% for frame in available_frames %}
-            <li>{{ frame.date }}</a></li>
-            <li>リレーションで部屋の概要をとってくる</a></li>
-            <a>予約する</a>
+        {% for available_frame in available_frames %}
+            <li>{{available_frame.date}} (空き部屋数：{{available_frame.number}})
+                <a href = "/facility/{{facility.uid}}">予約する(未実装)</a>
+            </li>
         {% endfor %}
     </div>
 

@@ -8,7 +8,7 @@
 <body>
     <h1>facility index</h1>
     {% for Facility in Facility_list %}
-       <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.uid }}</a></li>
+       <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.name }}</a></li>
     {% endfor %}
 
 </body>
