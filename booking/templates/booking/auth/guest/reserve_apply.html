@@ -6,12 +6,14 @@
 </head>
 <body>
     <h1>予約する</h1>
-    <form action="reservation/save/{{selected_reservation.id}}" method="post">
+    <form action="/reserve/save/" method="post">
         {% csrf_token %}
-        <p>施設名：{{facility.name}}<p>
-        <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly></p>
-        <p>チェックアウト日：<input type = "date" name="checkin" min =  "{{ selected_date }}" max={{deadline}}></p>
-        <button type="submit">予約を確定する(未実装)</button>
+            <p>施設名：{{facility.name}}
+            <input type = "hidden" name="facility_uid" value = "{{facility.uid}}" required><p>
+            <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly required></p>
+            <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_date }}" min =  "{{ selected_date }}" max={{deadline}} required></p>
+            <p>ユーザー名：{{user.guestuser.username}}</p>
+        <button type="submit">予約を確定する</button>
     </form>
 </body>
 </html>
