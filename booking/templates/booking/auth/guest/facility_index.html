@@ -1,0 +1,15 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>facility index</title>
+</head>
+<body>
+    <h1>facility index</h1>
+    {% for Facility in Facility_list %}
+       <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.name }}</a></li>
+    {% endfor %}
+
+</body>
+</html>

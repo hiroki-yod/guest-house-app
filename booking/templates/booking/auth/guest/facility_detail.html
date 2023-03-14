@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>facility detail</title>
+</head>
+<body>
+    <h1>facility detail</h1>
+    <div>
+        <h2>name: {{ facility.name }}</h2>
+        <div>
+            <p>address:</p>
+            <p>〒 {{ facility.post_code }}</p>
+            <p>{{ facility.address }}</p>
+        </div>
+        <div>
+            {{ facility.photo }}
+        </div>
+        <h3>{{ facility.bio }}</h3>
+        
+        <a href="{{ facility.website }}">施設のウェブサイトへ</p>
+    </div>
+    <p><a href="/reserve/{{facility.uid}}/frame/index">施設予約に進む</a></p>
+    <p><a href="/facility/index">戻る</a></p>
+</body>
+</html>
