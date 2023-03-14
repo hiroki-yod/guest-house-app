@@ -11,5 +11,7 @@ urlpatterns = [
     path('login/', auth.login_common.as_view(), name='login'),
     path('logout/', auth.logout_common.as_view(), name='logout'),
     #host.py
+    path('host/facility', host.facility_list.as_view(), name='facility_list'),
     path('host/facility/register', host.facility_register.as_view(), name='facility_register'),
+    path('host/room/register', host.room_register.as_view(), name='room_register'),
 ]
