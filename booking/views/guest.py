@@ -11,7 +11,7 @@ class facility_index(View):
         param = {
             'Facility_list':Facility_list,
         }
-        return render(request, "booking/auth/guest/facility_index.html", param)
+        return render(request, "booking/guest/facility_index.html", param)
         #return HttpResponse("You're looking at facility_index")
 
 class facility_detail(View):
@@ -21,7 +21,7 @@ class facility_detail(View):
             facility = Facility.objects.get(pk=facility_id)
         except facility.DoesNotExist:
             raise Http404("Facility does not exist")
-        return render(request, 'booking/auth/guest/facility_detail.html', {'facility': facility})
+        return render(request, 'booking/guest/facility_detail.html', {'facility': facility})
     
 class reserve_frame_index(View):
     def get(self, request, selected_facility_id):
@@ -57,7 +57,7 @@ class reserve_frame_index(View):
             }
         except selected_facility.DoesNotExist:
             raise Http404("Facility does not exist")
-        return render(request, "booking/auth/guest/reserve_frame.html", param)
+        return render(request, "booking/guest/reserve_frame.html", param)
 
 #チェックイン先のfacilityとチェックイン日付(リンク生成の都合上reservation_frameで渡している)が与えられたとき、チェックアウト可能な最も遅い日付をdeadlineに格納する。
 #チェックアウト可能な最も遅い日付 == チェックイン日付から、利用可能なreservation_frameが連続的に確保できる日付
@@ -74,7 +74,7 @@ class reserve_frame_apply(View):
                      'facility' : Facility.objects.get(pk=selected_facility_id), 
                      'selected_date':selected_reservation.date.isoformat(), 
                      'deadline':deadline.isoformat()}
-            return render(request, 'booking/auth/guest/reserve_apply.html', param)
+            return render(request, 'booking/guest/reserve_apply.html', param)
         else:
             return HttpResponse("空いている予約枠がありません。")
 
@@ -107,5 +107,3 @@ class reserve_save(View):
                                 room_id = selected_room_id, guest_id = selected_guest_id)
         #マイページに飛ばす
         return HttpResponse("予約が完了しました")
-        
-        
