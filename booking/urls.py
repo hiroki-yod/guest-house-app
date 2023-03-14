@@ -1,5 +1,5 @@
-from django.urls import path, include
-from .views import main, auth
+from django.urls import path
+from .views import main, auth, host
 
 
 urlpatterns = [
@@ -10,7 +10,6 @@ urlpatterns = [
     path('signup/', auth.signup_guest.as_view(), name='signup_guest'),
     path('login/', auth.login_common.as_view(), name='login'),
     path('logout/', auth.logout_common.as_view(), name='logout'),
-    # path('signup/', auth.signup_guest.as_view(), name='signup_guest'),
-    # path('login/', auth.login_guest.as_view(), name='login_guest'),
-    # path('logout/', auth.logout_guest.as_view(), name='logout_guest'),
+    #host.py
+    path('host/facility/register', host.facility_register.as_view(), name='facility_register'),
 ]
