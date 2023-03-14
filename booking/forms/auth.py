@@ -1,4 +1,3 @@
-from django import forms
 from booking.models import HostUser, GuestUser
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 

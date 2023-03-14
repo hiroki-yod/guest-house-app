@@ -1,0 +1,19 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Facility List</title>
+</head>
+<body>
+    <h1>Facility List</h1>
+    {% for facility in facilities %}
+        <p>{{ facility.name }}</p>
+        <p>{{ facility.post_code }}</p>
+        <p>{{ facility.address }}</p>
+        <p>{{ facility.bio }}</p>
+        <p>{{ facility.website }}</p>
+        <p>---</p>
+    {% endfor %}
+</body>
+</html>

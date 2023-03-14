@@ -38,7 +38,7 @@ class Facility(models.Model):
     name = models.CharField(max_length=100)
     post_code = models.CharField(max_length=7)
     address = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to='images/')
+    photo = models.ImageField(upload_to='images/', null=True)
     bio = models.CharField(max_length=400, blank=True)
     website = models.URLField(blank=True)
     host = models.ForeignKey(to=HostUser, on_delete=models.DO_NOTHING)
@@ -48,7 +48,7 @@ class Facility(models.Model):
 
 
 class Room(models.Model):
-    room_name = models.CharField(max_length=100)
+    room_name = models.CharField(max_length=100)    #後でnameに変更
     facility = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
 
     def __str__(self):

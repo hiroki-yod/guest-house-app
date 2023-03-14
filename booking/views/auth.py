@@ -50,6 +50,6 @@ class login_common(View):
 
 
 class logout_common(View):
-    def get(self, request):
+    def post(self, request):
         logout(request)
         return redirect('/')

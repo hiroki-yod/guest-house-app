@@ -1,5 +1,5 @@
-from django.urls import path, include
-from .views import main, auth, guest
+from django.urls import path
+from .views import main, auth, host
 
 
 urlpatterns = [
@@ -10,9 +10,11 @@ urlpatterns = [
     path('signup/', auth.signup_guest.as_view(), name='signup_guest'),
     path('login/', auth.login_common.as_view(), name='login'),
     path('logout/', auth.logout_common.as_view(), name='logout'),
-    # path('signup/', auth.signup_guest.as_view(), name='signup_guest'),
-    # path('login/', auth.login_guest.as_view(), name='login_guest'),
-    # path('logout/', auth.logout_guest.as_view(), name='logout_guest'),
+
+    #host.py
+    path('host/facility', host.facility_list.as_view(), name='facility_list'),
+    path('host/facility/register', host.facility_register.as_view(), name='facility_register'),
+    path('host/room/register', host.room_register.as_view(), name='room_register'),
 
     #ここから編集 認証の仕組みがわからなかったのでとりあえずguest.pyというのをauth関係から隔離して実装
     path('facility/index/', guest.facility_index.as_view(), name='facility_index'),
