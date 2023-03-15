@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from booking.forms import auth
 from ..models import Facility, Reservation, ReservationFrame, Room
 import datetime
+from django.db.models import Q
 
 class guest_mypage(View):
     def get(self, request):
@@ -19,7 +20,10 @@ class facility_index(View):
         Facility_list = Facility.objects.order_by('name')
         param = {
             'Facility_list':Facility_list,
-            'words' : ' '
+            'words' : ' ', 
+            'places' : ' ', 
+            'selected_checkin' : datetime.datetime.now().date().isoformat(),
+            'selected_checkout' : datetime.datetime.now().date().isoformat(),
         }
         return render(request, "booking/guest/facility_index.html", param)
         #return HttpResponse("You're looking at facility_index")
@@ -27,17 +31,44 @@ class facility_index(View):
     def post(self, request):
         #検索文字列POST["words"]の全角スペースを半角スペースに変換し、半角スペースで区切る。区切った各ワードを配列wordsに格納
         words = request.POST["words"].replace("　"," ").split(" ")
+        places = request.POST["places"].replace("　"," ").split(" ")
+
 
         #配列wordsの各要素wordでand検索をかける
         searched_facility_list = Facility.objects
         for word in words:
             searched_facility_list = searched_facility_list.filter(name__icontains = word)
+
+        #placeでのor検索
+        q = Q()
+        for place in places:
+            q.add(Q(address__icontains =place), Q.OR)
+        searched_facility_list = searched_facility_list.filter(q)
+
+        #is_date_searchがtrueのとき、checkinからcheckoutまでの日程が確保できる施設のみを検索
+        if request.POST["is_date_search"] == "1":
+            selected_checkin = datetime.datetime.strptime(request.POST["checkin"], "%Y-%m-%d")
+            selected_checkout = datetime.datetime.strptime(request.POST["checkout"], "%Y-%m-%d")
+            for i in range(( selected_checkout - selected_checkin).days + 1):
+                currentdate = selected_checkin + datetime.timedelta(i)
+                available_reservation_frames = ReservationFrame.objects.filter(is_reserved = 0).filter(date = currentdate).order_by("date")
+                available_facilities = []
+                for available_reservation_frame in available_reservation_frames:
+                    available_facilities.append(available_reservation_frames.first().room.facility)
+
+
+
+            
         #nameで並び替え
         searched_facility_list = searched_facility_list.order_by('name')
         words = ' '.join(map(str, words))
+        places = ' '.join(map(str, places))
         param = {
             'Facility_list':searched_facility_list,
-            'words': words
+            'words': words, 
+            'places': places, 
+            'selected_checkin': selected_checkin,
+            'selected_checkout':selected_checkout, 
         }
         return render(request, "booking/guest/facility_index.html", param)
 
