@@ -16,12 +16,30 @@ class guest_mypage(View):
 
 class facility_index(View):
     def get(self, request):
-        Facility_list = Facility.objects.order_by('name')[:5]
+        Facility_list = Facility.objects.order_by('name')
         param = {
             'Facility_list':Facility_list,
+            'words' : ' '
         }
         return render(request, "booking/guest/facility_index.html", param)
         #return HttpResponse("You're looking at facility_index")
+
+    def post(self, request):
+        #検索文字列POST["words"]の全角スペースを半角スペースに変換し、半角スペースで区切る。区切った各ワードを配列wordsに格納
+        words = request.POST["words"].replace("　"," ").split(" ")
+
+        #配列wordsの各要素wordでand検索をかける
+        searched_facility_list = Facility.objects
+        for word in words:
+            searched_facility_list = searched_facility_list.filter(name__icontains = word)
+        #nameで並び替え
+        searched_facility_list = searched_facility_list.order_by('name')
+        words = ' '.join(map(str, words))
+        param = {
+            'Facility_list':searched_facility_list,
+            'words': words
+        }
+        return render(request, "booking/guest/facility_index.html", param)
 
 class facility_detail(View):
     def get(self, request, facility_id):

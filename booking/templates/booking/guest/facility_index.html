@@ -7,6 +7,13 @@
 </head>
 <body>
     <h1>facility index</h1>
+    <form action = "/facility/index/", method = POST>
+        {% csrf_token %}
+        <label for="search_text">ワード検索(スペース区切り、and検索)</label>
+        <input type="text" id = "search_text" name = "words" value="{{words}}">
+        <button type="submit">検索</button>
+    </form>
+    <h1>検索結果</h1>
     {% for Facility in Facility_list %}
        <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.name }}</a></li>
     {% endfor %}
