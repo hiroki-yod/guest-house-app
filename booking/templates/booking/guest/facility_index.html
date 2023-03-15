@@ -30,8 +30,10 @@
     </form>
     <h1>検索結果</h1>
     {% for Facility in Facility_list %}
-       <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.name }}</a></li>
+       <li><a href="/facility/{{ Facility.uid }}">{{ Facility.name }}</a></li>
     {% endfor %}
+
+    <a href="/guest/mypage">戻る</a>
 
 </body>
 </html>

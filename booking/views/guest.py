@@ -45,20 +45,36 @@ class facility_index(View):
             q.add(Q(address__icontains =place), Q.OR)
         searched_facility_list = searched_facility_list.filter(q)
 
+        selected_checkin = datetime.datetime.strptime(request.POST["checkin"], "%Y-%m-%d").date()
+        selected_checkout = datetime.datetime.strptime(request.POST["checkout"], "%Y-%m-%d").date()
+        
+        
         #is_date_searchがtrueのとき、checkinからcheckoutまでの日程が確保できる施設のみを検索
         if request.POST["is_date_search"] == "1":
-            selected_checkin = datetime.datetime.strptime(request.POST["checkin"], "%Y-%m-%d")
-            selected_checkout = datetime.datetime.strptime(request.POST["checkout"], "%Y-%m-%d")
-            for i in range(( selected_checkout - selected_checkin).days + 1):
+            #チェックイン日付がチェックアウト日付より後の場合は初期値を空にしてからの絞り込み = 施設を表示しない
+            if selected_checkin > selected_checkout:
+                available_facilities_name = []
+            else:
+                #予約可能な施設の初期値は全施設 = 全集合からの絞り込みによって正常に検索を行う
+                available_facilities_name = list(Facility.objects.all().distinct().values_list("name", flat=True))
+
+            for i in range(( selected_checkout - selected_checkin).days + 1): #日付についてfor文を回す
                 currentdate = selected_checkin + datetime.timedelta(i)
-                available_reservation_frames = ReservationFrame.objects.filter(is_reserved = 0).filter(date = currentdate).order_by("date")
-                available_facilities = []
-                for available_reservation_frame in available_reservation_frames:
-                    available_facilities.append(available_reservation_frames.first().room.facility)
 
+                #currentdateに対して空いている予約枠を取得
+                current_available_frames = ReservationFrame.objects.filter(is_reserved = 0).filter(date = currentdate).order_by("date")
 
+                #currentdateに対して空いている予約枠に属するfacilityを全て取得、施設名をcurrent_available_facilities_nameに格納
+                current_available_facilities_name = []
+                for current_available_frame in current_available_frames:
+                    current_available_facilities_name.append(current_available_frame.room.facility.name)
 
-            
+                #currentdateに対して空きのある施設のみに絞り込んでいく
+                available_facilities_name= list(set(available_facilities_name) & set(current_available_facilities_name)) 
+
+            #検索結果を予約枠に空きがある施設のみに限定
+            searched_facility_list = searched_facility_list.filter(name__in = available_facilities_name)
+        
         #nameで並び替え
         searched_facility_list = searched_facility_list.order_by('name')
         words = ' '.join(map(str, words))
@@ -67,8 +83,8 @@ class facility_index(View):
             'Facility_list':searched_facility_list,
             'words': words, 
             'places': places, 
-            'selected_checkin': selected_checkin,
-            'selected_checkout':selected_checkout, 
+            'selected_checkin': selected_checkin.isoformat(),
+            'selected_checkout':selected_checkout.isoformat(), 
         }
         return render(request, "booking/guest/facility_index.html", param)
 
@@ -87,14 +103,8 @@ class reserve_frame_index(View):
             selected_facility = Facility.objects.get(pk=selected_facility_id)
             rooms = Room.objects.filter(facility_id=selected_facility_id)
             reservation_frames = ReservationFrame.objects.filter(is_reserved = 0).filter(room_id__in = rooms).order_by("date")
-            available_dates = reservation_frames.distinct().values_list('date')
-
-            #availableDatesの要素availableDateはtupple配列になっており、availableDate[0]としないとdatetime型で取り出せない。これは不便なので修正しておく
-            #availableDateLists はdatetime型の配列であり、予約可能な日時を重複なしで持っている
-            available_date_lists = []
-            for available_date in available_dates:
-                available_date_lists.append(available_date[0])
-
+            available_date_lists = list(reservation_frames.distinct().values_list('date', flat = True))
+            
             #capacity_listはavailable_date_listsとkeyが対応しており、その日付における空き部屋の数を格納している
             capacity_list = []
             for available_date in available_date_lists:
