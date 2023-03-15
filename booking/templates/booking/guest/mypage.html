@@ -1,0 +1,21 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>マイページ</title>
+</head>
+<body>
+    <h1>ようこそ、{{ user.guestuser.username }}さん</h1>
+    <a href="/facility/index">施設検索に進む</a>
+    <h2>予約一覧</h2>
+    {% for reservation in reservations %}
+        <p>
+            <li>施設名:{{reservation.room.facility.name}}
+            <li>部屋名:{{reservation.room.room_name}}
+            <li>期間：{{reservation.check_in_date}}から{{reservation.check_out_date}}</li>
+        </p>
+    {% endfor %}
+
+</body>
+</html>

@@ -5,6 +5,15 @@ from booking.forms import auth
 from ..models import Facility, Reservation, ReservationFrame, Room
 import datetime
 
+class guest_mypage(View):
+    def get(self, request):
+        current_guest_id = request.user.guestuser.uid
+        reservations = Reservation.objects.filter(guest_id = current_guest_id).order_by('check_in_date')
+        param={
+            'reservations':reservations,
+        }
+        return render(request, "booking/guest/mypage.html", param)
+
 class facility_index(View):
     def get(self, request):
         Facility_list = Facility.objects.order_by('name')[:5]
@@ -106,4 +115,4 @@ class reserve_save(View):
         Reservation.objects.create(is_canceled = 0, is_checked_in = 0, check_in_date = selected_check_in_date, check_out_date = selected_check_out_date,\
                                 room_id = selected_room_id, guest_id = selected_guest_id)
         #マイページに飛ばす
-        return HttpResponse("予約が完了しました")
+        return redirect('/guest/mypage')
