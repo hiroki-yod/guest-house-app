@@ -7,9 +7,33 @@
 </head>
 <body>
     <h1>facility index</h1>
+    <form action = "/facility/index/", method = POST>
+        {% csrf_token %}
+        <p>
+            <label for="search_name">名前検索(スペース区切り、and検索)</label>
+            <input type="text" id = "search_name" name = "words" value="{{words}}">
+        </p>
+        <p>
+            <label for="search_text">地名検索(スペース区切り、or検索)</label>
+            <input type="text" id = "search_place" name = "places" value="{{places}}">
+        </p>
+        <p>
+            <input type="radio" id = "is_date_search_true" name = "is_date_search" value="1">
+            <label for="is_date_search_true">時間検索あり</label>
+            <input type="radio" id = "is_date_search_false" name = "is_date_search" value="0" checked>
+            <label for="is_date_search_false"  >時間検索なし</label>
+        </p>
+        <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_checkin }}" >から</p>
+        <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_checkout }}" min =  "{{ now }}">
+        までの日程に空きがある施設</p>
+        <button type="submit">検索</button>
+    </form>
+    <h1>検索結果</h1>
     {% for Facility in Facility_list %}
-       <li><a href="/facility/{{ Facility.uid }}/">{{ Facility.name }}</a></li>
+       <li><a href="/facility/{{ Facility.uid }}">{{ Facility.name }}</a></li>
     {% endfor %}
+
+    <a href="/guest/mypage">戻る</a>
 
 </body>
 </html>
