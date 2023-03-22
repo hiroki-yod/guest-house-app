@@ -5,8 +5,12 @@ from booking.forms import auth
 from ..models import Facility, Reservation, ReservationFrame, Room
 import datetime
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from ..decorators import guest_login_required
+from django.utils.decorators import method_decorator
 
 class guest_mypage(View):
+    @method_decorator(guest_login_required)
     def get(self, request):
         current_guest_id = request.user.guestuser.uid
         reservations = Reservation.objects.filter(guest_id = current_guest_id).order_by('check_in_date')
@@ -16,6 +20,7 @@ class guest_mypage(View):
         return render(request, "booking/guest/mypage.html", param)
 
 class facility_index(View):
+    @method_decorator(guest_login_required)
     def get(self, request):
         Facility_list = Facility.objects.order_by('name')
         param = {
@@ -27,7 +32,8 @@ class facility_index(View):
         }
         return render(request, "booking/guest/facility_index.html", param)
         #return HttpResponse("You're looking at facility_index")
-
+    
+    @method_decorator(guest_login_required)
     def post(self, request):
         #検索文字列POST["words"]の全角スペースを半角スペースに変換し、半角スペースで区切る。区切った各ワードを配列wordsに格納
         words = request.POST["words"].replace("　"," ").split(" ")
@@ -89,6 +95,7 @@ class facility_index(View):
         return render(request, "booking/guest/facility_index.html", param)
 
 class facility_detail(View):
+    @method_decorator(guest_login_required)
     def get(self, request, facility_id):
         #return HttpResponse("You're looking at facility_detail")
         try:
@@ -98,6 +105,7 @@ class facility_detail(View):
         return render(request, 'booking/guest/facility_detail.html', {'facility': facility})
     
 class reserve_frame_index(View):
+    @method_decorator(guest_login_required)
     def get(self, request, selected_facility_id):
         try:
             selected_facility = Facility.objects.get(pk=selected_facility_id)
@@ -131,6 +139,7 @@ class reserve_frame_index(View):
 #チェックアウト可能な最も遅い日付 == チェックイン日付から、利用可能なreservation_frameが連続的に確保できる日付
 #while文を与えているので、雑に編集すると無限ループの可能性があるので注意。
 class reserve_frame_apply(View):
+    @method_decorator(guest_login_required)
     def get(self, request, selected_facility_id, selected_frame_id):
         if ReservationFrame.objects.filter(is_reserved = 0).filter(pk=selected_frame_id).exists():
             selected_reservation = ReservationFrame.objects.filter(is_reserved = 0).filter(pk=selected_frame_id).get()
@@ -147,6 +156,7 @@ class reserve_frame_apply(View):
             return HttpResponse("空いている予約枠がありません。")
 
 class reserve_save(View):
+    @method_decorator(guest_login_required)
     def post(self, request):
         selected_guest_id = request.user.guestuser.uid
         selected_check_in_date = datetime.datetime.strptime(request.POST["checkin"], "%Y-%m-%d")
