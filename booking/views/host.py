@@ -3,10 +3,14 @@ from django.shortcuts import render, redirect
 from booking.forms.host import FacilityForm, RoomForm
 from booking.models import Facility, Room, ReservationFrame
 from datetime import datetime, timedelta
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from ..decorators import host_login_required
+#ホストでログインしている場合のみ表示するための関数をdecorators.pyに定義した
+#@method_decorator(host_login_required)で認証できる
 
 class facility_list(View):
-
+    @method_decorator(host_login_required)
     def get(self, request):
         facilities = Facility.objects.filter(host=request.user.hostuser)
         param = {'facilities': facilities}
@@ -14,12 +18,13 @@ class facility_list(View):
 
 
 class facility_register(View):
-
+    @method_decorator(host_login_required)
     def get(self, request):
         form = FacilityForm()
         param = {'form': form}
         return render(request, "booking/host/facility/register.html", param)
-
+    
+    @method_decorator(host_login_required)
     def post(self, request):
         form = FacilityForm(request.POST)
         if form.is_valid():
@@ -44,13 +49,14 @@ class facility_register(View):
 
 
 class room_register(View):
-
+    @method_decorator(host_login_required)
     def get(self, request):
         form = RoomForm()
         form.fields['facility'].queryset = Facility.objects.filter(host=request.user.hostuser)
         param = {'form': form}
         return render(request, "booking/host/room/register.html", param)
-
+    
+    @method_decorator(host_login_required)
     def post(self, request):
         form = RoomForm(request.POST)
         if form.is_valid():
