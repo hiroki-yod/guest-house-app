@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from booking.forms import auth
-from ..models import Facility, Reservation, ReservationFrame, Room
+from ..models import Facility, Reservation, ReservationFrame, Room, Event, EventApplication
 import datetime
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -100,9 +100,10 @@ class facility_detail(View):
         #return HttpResponse("You're looking at facility_detail")
         try:
             facility = Facility.objects.get(pk=facility_id)
+            events = Event.objects.filter(facility=facility)
         except facility.DoesNotExist:
             raise Http404("Facility does not exist")
-        return render(request, 'booking/guest/facility_detail.html', {'facility': facility})
+        return render(request, 'booking/guest/facility_detail.html', {'facility': facility, 'events' : events})
     
 class reserve_frame_index(View):
     @method_decorator(guest_login_required)

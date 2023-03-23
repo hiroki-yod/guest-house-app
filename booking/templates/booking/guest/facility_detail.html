@@ -23,5 +23,18 @@
     </div>
     <p><a href="/reserve/{{facility.uid}}/frame/index">施設予約に進む</a></p>
     <p><a href="/facility/index">戻る</a></p>
+    <h2>開催中のイベント</h2>
+    <div>
+        {% for event in events %}
+        <p>{{ event.event_name }}</p>
+        <p>{{ event.event_detail }}</p>
+        <p>{{ event.facility.name }}</p>
+        <p>{{ event.begin_date }}</p>
+        <p>{{ event.end_date}}</p>
+        <p>{{ event.deadline}}</p>
+        <p>paticipants : {{ event.current_participants}} / {{ event.max_participants}}</p>
+        <p>---</p>
+        {% endfor %}
+    </div>
 </body>
 </html>

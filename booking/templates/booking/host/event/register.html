@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Event Register</title>
+</head>
+<body>
+    <h1>Event Register</h1>
+    <form action="{% url 'event_register' %}" method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Register"></p>
+    </form>
+</body>
+</html>

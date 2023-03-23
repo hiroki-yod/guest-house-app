@@ -1,7 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from booking.forms.host import FacilityForm, RoomForm
-from booking.models import Facility, Room, ReservationFrame
+from booking.forms.host import FacilityForm, RoomForm, EventForm
+from booking.models import Facility, Room, ReservationFrame, Event, EventApplication
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -47,7 +47,6 @@ class facility_register(View):
             facility.save()
         return redirect('/')
 
-
 class room_register(View):
     @method_decorator(host_login_required)
     def get(self, request):
@@ -72,4 +71,45 @@ class room_register(View):
                     room = room
                 )
                 reservation_frame.save()
+        return redirect('/')
+class event_list(View):
+    @method_decorator(host_login_required)
+    def get(self, request):
+        events = Event.objects.filter(host=request.user.hostuser)
+        param = {'events': events}
+        return render(request, "booking/host/event/list.html", param)
+
+
+class event_register(View):
+    @method_decorator(host_login_required)
+    def get(self, request):
+        form = EventForm()
+        param = {'form': form}
+        return render(request, "booking/host/event/register.html", param)
+    
+    @method_decorator(host_login_required)
+    def post(self, request):
+        form = EventForm(request.POST)
+        if form.is_valid():
+            #必要なデータ
+            event_name = form.cleaned_data['event_name']
+            event_detail = form.cleaned_data['event_detail']
+            begin_date = form.cleaned_data['begin_date']
+            end_date = form.cleaned_data['end_date']
+            deadline = form.cleaned_data['deadline']
+            max_participants = form.cleaned_data['max_participants']
+            facility = form.cleaned_data['facility']
+            host = request.user.hostuser
+            #保存処理
+            event = Event(
+                event_name = event_name, 
+                event_detail = event_detail, 
+                facility = facility, 
+                host = host, 
+                begin_date = begin_date, 
+                end_date = end_date, 
+                deadline = deadline, 
+                max_participants = max_participants, 
+            )
+            event.save()
         return redirect('/')
