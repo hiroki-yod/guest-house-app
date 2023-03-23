@@ -47,13 +47,34 @@ class Facility(models.Model):
         return self.name
 
 
+class Event(models.Model):
+    event_name = models.CharField(max_length=100)    #後でnameに変更
+    event_detail = models.CharField(max_length=1000)
+    facility = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
+    host = models.ForeignKey(to=HostUser, on_delete=models.DO_NOTHING)
+    begin_date = models.DateField()
+    end_date = models.DateField()
+    deadline = models.DateField()
+    max_participants = models.IntegerField()
+    current_participants = models.IntegerField(default=0)
+    def __str__(self):
+        return self.facility.name + '_' + self.event_name
+
+class EventApplication(models.Model):
+    event = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
+    guestuser = models.ForeignKey(to=GuestUser, on_delete=models.CASCADE)
+    is_present = models.BooleanField(default=False)
+    comment = models.CharField(max_length=1000)
+    def __str__(self):
+        return str(self.date) + '_' + self.event.facility.name + '_' + self.event.event_name
+
+
 class Room(models.Model):
     room_name = models.CharField(max_length=100)    #後でnameに変更
     facility = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.facility.name + '_' + self.room_name
-
 
 class ReservationFrame(models.Model):
     date = models.DateField()

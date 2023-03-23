@@ -15,6 +15,8 @@ urlpatterns = [
     path('host/facility', host.facility_list.as_view(), name='facility_list'),
     path('host/facility/register', host.facility_register.as_view(), name='facility_register'),
     path('host/room/register', host.room_register.as_view(), name='room_register'),
+    path('host/event', host.event_list.as_view(), name='event_list'),
+    path('host/event/register', host.event_register.as_view(), name='event_register'),
 
     #guest.py
     path('guest/mypage/', guest.guest_mypage.as_view(), name='guest_mypage'),
