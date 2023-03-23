@@ -104,6 +104,18 @@ class facility_detail(View):
         except facility.DoesNotExist:
             raise Http404("Facility does not exist")
         return render(request, 'booking/guest/facility_detail.html', {'facility': facility, 'events' : events})
+
+class guest_event_apply(View):
+    #to fix
+    @method_decorator(guest_login_required)
+    def get(self, request, facility_id):
+        #return HttpResponse("You're looking at facility_detail")
+        try:
+            facility = Facility.objects.get(pk=facility_id)
+            events = Event.objects.filter(facility=facility)
+        except facility.DoesNotExist:
+            raise Http404("Facility does not exist")
+        return render(request, 'booking/guest/facility_event_list.html', {'facility': facility, 'events' : events})
     
 class reserve_frame_index(View):
     @method_decorator(guest_login_required)

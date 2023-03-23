@@ -22,7 +22,6 @@
         <a href="{{ facility.website }}">施設のウェブサイトへ</p>
     </div>
     <p><a href="/reserve/{{facility.uid}}/frame/index">施設予約に進む</a></p>
-    <p><a href="/facility/index">戻る</a></p>
     <h2>開催中のイベント</h2>
     <div>
         {% for event in events %}
@@ -33,8 +32,10 @@
         <p>{{ event.end_date}}</p>
         <p>{{ event.deadline}}</p>
         <p>paticipants : {{ event.current_participants}} / {{ event.max_participants}}</p>
+        <h3><a href="/facility/event/apply/{{facility.uid}}/{{event.id}}">このイベントを予約する</a></h3>
         <p>---</p>
         {% endfor %}
     </div>
+    <p><a href="/facility/index">戻る</a></p>
 </body>
 </html>
