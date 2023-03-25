@@ -14,13 +14,16 @@ class guest_mypage(View):
     def get(self, request):
         current_guest_id = request.user.guestuser.uid
         reservations = Reservation.objects.filter(guest_id = current_guest_id).order_by('check_in_date')
+        event_applications_list = EventApplication.objects.filter(guestuser_id = current_guest_id).distinct().values_list('event', flat = True)
+        events = Event.objects.filter(pk__in = event_applications_list)
         param={
             'reservations':reservations,
+            'events':events
         }
         return render(request, "booking/guest/mypage.html", param)
 
 class facility_index(View):
-    @method_decorator(guest_login_required)
+    @method_decorator(login_required)
     def get(self, request):
         Facility_list = Facility.objects.order_by('name')
         param = {
@@ -186,3 +189,36 @@ class reserve_save(View):
                                 room_id = selected_room_id, guest_id = selected_guest_id)
         #マイページに飛ばす
         return redirect('/guest/mypage')
+
+class guest_event_apply(View):
+    @method_decorator(guest_login_required)
+    def get(self, request, facility_uid, event_id):
+        
+        try:
+            facility = Facility.objects.get(pk=facility_uid)
+            event = Event.objects.get(pk=event_id)
+
+        except facility.DoesNotExist:
+            raise Http404("Facility does not exist")
+        except event.DoesNotExist:
+            raise Http404("event does not exist")
+
+        return render(request, 'booking/guest/event_apply.html', {'facility': facility, 'event' : event})    
+
+class guest_event_apply_save(View):
+    @method_decorator(guest_login_required)
+    def post(self, request):
+        selected_guest = request.user.guestuser
+        selected_event = Event.objects.get(pk=request.POST["event_id"])
+        selected_facility = Facility.objects.get(pk=request.POST["facility_uid"])
+        if Reservation.objects.filter(guest_id = selected_guest.uid).filter(check_in_date__lte = selected_event.begin_date)\
+            .filter(check_out_date__gte = selected_event.end_date).exists():
+            EventApplication.objects.create(event = selected_event, guestuser = selected_guest, comment = request.POST["comment"])
+            selected_event.current_participants += 1
+            selected_event.save()
+            #マイページに飛ばす
+            return redirect('/guest/mypage')
+        else:
+            return HttpResponse('まず施設予約を行なってください。')
+
+        

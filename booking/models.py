@@ -61,7 +61,7 @@ class Event(models.Model):
         return self.facility.name + '_' + self.event_name
 
 class EventApplication(models.Model):
-    event = models.ForeignKey(to=Facility, on_delete=models.CASCADE)
+    event = models.ForeignKey(to=Event, on_delete=models.CASCADE)
     guestuser = models.ForeignKey(to=GuestUser, on_delete=models.CASCADE)
     is_present = models.BooleanField(default=False)
     comment = models.CharField(max_length=1000)
