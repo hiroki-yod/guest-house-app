@@ -25,5 +25,6 @@ urlpatterns = [
     path('reserve/<uuid:selected_facility_id>/frame/index', guest.reserve_frame_index.as_view(), name='reserve_frame_index'),
     path('reserve/<uuid:selected_facility_id>/<int:selected_frame_id>/', guest.reserve_frame_apply.as_view(), name='reserve_frame_apply'),
     path('reserve/save/', guest.reserve_save.as_view(), name='reserve_save'),
-    path('facility/<uuid:facility_id>/event/<int:event_id>', guest.guest_event_apply.as_view(), name='event_apply'),
+    path('facility/event/apply/save', guest.guest_event_apply_save.as_view(), name='event_apply_save'),
+    path('facility/event/apply/<uuid:facility_uid>/<int:event_id>', guest.guest_event_apply.as_view(), name='event_apply'),
 ]

@@ -8,12 +8,21 @@
 <body>
     <h1>ようこそ、{{ user.guestuser.username }}さん</h1>
     <a href="/facility/index">施設検索に進む</a>
-    <h2>予約一覧</h2>
+    <h2>予約した施設一覧</h2>
     {% for reservation in reservations %}
         <p>
-            <li>施設名:{{reservation.room.facility.name}}
-            <li>部屋名:{{reservation.room.room_name}}
+            <li>施設名:{{reservation.room.facility.name}}</li>
+            <li>部屋名:{{reservation.room.room_name}}</li>
             <li>期間：{{reservation.check_in_date}}から{{reservation.check_out_date}}</li>
+        </p>
+    {% endfor %}
+    <h2>予約したイベント一覧</h2>
+    {% for event in events %}
+        <p>
+            <li>施設名:{{event.facility.name}}</li>
+            <li>イベント名：{{event.event_name}}</li>
+            <li>イベント内容：{{event.event_detail}}</li>
+            <li>期間：{{event.begin_date}}から{{event.end_date}}</li>
         </p>
     {% endfor %}
 
