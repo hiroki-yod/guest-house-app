@@ -37,7 +37,7 @@ class CreateCheckoutSessionView(View):
             # 決済詳細
             line_items=[
                 {
-                    'price': price.stripe_price_id,       # 価格IDを指定
+                    'price': price.stripe_price_id,       # 価格IDを指定 
                     'quantity': 1,                        # 数量
                 },
             ],

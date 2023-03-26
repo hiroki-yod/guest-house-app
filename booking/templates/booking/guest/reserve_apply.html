@@ -13,7 +13,16 @@
             <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly required></p>
             <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_date }}" min =  "{{ selected_date }}" max={{deadline}} required></p>
             <p>ユーザー名：{{user.guestuser.username}}</p>
-        <button type="submit">予約を確定する</button>
+        <button type="submit">予約のみ行う(支払いなし)</button>
+    </form>
+    
+    <form action="{% url 'create-checkout-session' selected_reservation.id %}" method="POST">
+        <p>
+
+            <li>価格：¥{{ selected_reservation.Prices.first.get_display_price}}</li>
+            {% csrf_token %}
+            <button type="submit">予約と決済を行う</button>
+        </p>
     </form>
     <a href="/reserve/{{facility.uid}}/frame/index">戻る</a>
 </body>
