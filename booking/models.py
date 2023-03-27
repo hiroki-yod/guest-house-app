@@ -80,10 +80,22 @@ class ReservationFrame(models.Model):
     date = models.DateField()
     is_reserved = models.BooleanField(default=False)
     room = models.ForeignKey(to=Room, on_delete=models.SET_NULL, null=True)
+    stripe_product_id = models.CharField(max_length=100, default='prod_Nb1gCAxVrlgwRv')
 
     def __str__(self):
         return str(self.date) + '_' + self.room.facility.name + '_' + self.room.room_name
 
+class Price(models.Model):
+    # 外部キーで商品マスタを紐付け
+    product = models.ForeignKey(ReservationFrame, related_name='Prices', on_delete=models.CASCADE)
+    # 価格ID（★stripeの価格IDを値に用いる）
+    stripe_price_id = models.CharField(max_length=100)
+    # 価格
+    price = models.IntegerField(default=0)
+    
+    # Django画面に表示する価格
+    def get_display_price(self):
+        return self.price
 
 class Reservation(models.Model):
     is_canceled = models.BooleanField(default=False)

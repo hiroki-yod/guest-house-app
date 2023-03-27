@@ -22,6 +22,14 @@
                     <p>ユーザー名：{{user.guestuser.username}}</p>
                 <button class="mt-4 font-bold hover:text-rose-900" type="submit">予約を確定する</button>
             </form>
+            <form action="{% url 'create-checkout-session' selected_reservation.id %}" method="POST" class="mt-4">
+                {% csrf_token %}
+                <p>
+                    <li>価格：¥{{ selected_reservation.Prices.first.get_display_price}}</li>
+                    {% csrf_token %}
+                    <button type="submit">予約と決済を行う</button>
+                </p>
+            </form>
         </div>
         <img class="w-2/5" src="/media/{{ facility.photo }}" alt="">
     </div>

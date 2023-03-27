@@ -109,6 +109,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Email設定
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -137,6 +140,13 @@ AUTH_USER_MODEL = 'booking.CommonUser'
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+# Stripeのパブリックキー
+STRIPE_PUBLIC_KEY = 'pk_test_51MpkFzINPfbKurYBrmvfurPkYOp50vwQNZATK6Yfn4utJF0ShNA67Duo3hzVEDoJgbmbtYutgQSzSL6Fkxz7iUBH009ToMvQ9I'
+
+# Stripeのシークレットキー
+STRIPE_SECRET_KEY = 'sk_test_51MpkFzINPfbKurYBNVNrWPwL3itKmpaNYklOn8IP54hNDaWzqWZx6HShJl4CLmRp5AKLGaiplrkEizpNJKLwuaqU002FYi8jAl'
 
 #MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import main, auth, host, guest, stripe
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import main, auth, host, guest
@@ -28,6 +29,10 @@ urlpatterns = [
     path('reserve/save/', guest.reserve_save.as_view(), name='reserve_save'),
     path('facility/event/apply/save', guest.guest_event_apply_save.as_view(), name='event_apply_save'),
     path('facility/event/apply/<uuid:facility_uid>/<int:event_id>', guest.guest_event_apply.as_view(), name='event_apply'),
+
+    #stripe.py
+    path("stripe", stripe.ProductTopPageView.as_view(), name="product-top-page"),   
+    path("create-checkout-session/<pk>/", stripe.CreateCheckoutSessionView.as_view(), name="create-checkout-session"),    # 個別商品決済画面
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
