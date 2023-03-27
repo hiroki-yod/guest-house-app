@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 #django-environの設定
-import environ
+import os, environ
 env = environ.Env()
 env.read_env('.env')
 
@@ -137,3 +137,7 @@ AUTH_USER_MODEL = 'booking.CommonUser'
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+#MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = 'media/'

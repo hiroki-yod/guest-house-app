@@ -188,7 +188,7 @@ class reserve_save(View):
         Reservation.objects.create(is_canceled = 0, is_checked_in = 0, check_in_date = selected_check_in_date, check_out_date = selected_check_out_date,\
                                 room_id = selected_room_id, guest_id = selected_guest_id)
         #マイページに飛ばす
-        return redirect('/guest/mypage')
+        return redirect('/mypage')
 
 class guest_event_apply(View):
     @method_decorator(guest_login_required)
@@ -217,7 +217,7 @@ class guest_event_apply_save(View):
             selected_event.current_participants += 1
             selected_event.save()
             #マイページに飛ばす
-            return redirect('/guest/mypage')
+            return redirect('/mypage')
         else:
             return HttpResponse('まず施設予約を行なってください。')
 

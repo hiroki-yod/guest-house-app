@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" type="image/png" href="{% static 'booking/images/logo.png' %}"/>
+        <title>Guest House App</title>
+    </head>
+    {% include "booking/nav_host.html" %}
+    <body>
+        <div class="max-w-screen-xl mx-auto py-8">
+            <div class="mx-auto max-w-lg text-center">
+              <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">MyPage</h1>
+            </div>
+            <div class="mt-16 mx-16">
+                <h2 class="text-xl text-rose-900 font-bold">管理施設一覧</h2>
+                {% for facility_data in facilities %}
+                <div class="mt-8">
+                    <h2 class="text-lg font-semibold">{{ facility_data.facility.name }}</h2>
+                    <div class="mt-2">
+                        <p>〒 {{ facility_data.facility.post_code }}</p>
+                        <p>{{ facility_data.facility.address }}</p>
+                    </div>
+                    <p class="mt-2 text-sm">{{ facility_data.facility.bio }}</p>
+                    <h3 class="font-semibold mt-4">Rooms</h3>
+                    <ul>
+                        {% for room in facility_data.rooms %}
+                            <li class="ml-2">{{ room.room_name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h3 class="font-semibold mt-4">Events</h3>
+                    <ul>
+                    {% for event in facility_data.events %}
+                        <li class="ml-2">{{ event.begin_date }}~{{ event.end_date}} {{ event.event_name }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>
