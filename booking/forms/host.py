@@ -16,4 +16,4 @@ class RoomForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['event_name', 'facility', 'host', 'event_detail', 'begin_date', 'end_date','deadline', 'max_participants']
+        fields = ['event_name', 'facility', 'event_detail', 'begin_date', 'end_date','deadline', 'max_participants']

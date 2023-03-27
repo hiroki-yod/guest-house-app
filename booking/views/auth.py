@@ -1,7 +1,9 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from booking.forms import auth
+from booking.models import HostUser
 from django.contrib.auth import login, logout
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class signup_host(View):
@@ -47,9 +49,19 @@ class login_common(View):
         form = auth.LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            if user:
-                login(request, user)
+            login(request, user)
+
+            try:
+                user.hostuser
+                return redirect('/host')
+            except ObjectDoesNotExist:
+                pass
+
+            try:
+                user.guestuser
                 return redirect('/')
+            except ObjectDoesNotExist:
+                pass
         return redirect('/login')
 
 
