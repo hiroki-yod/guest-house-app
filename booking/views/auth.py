@@ -29,7 +29,9 @@ class signup_guest(View):
         form = auth.GuestSignupForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('/login')
+            return redirect('/login')
+        else:
+            return redirect('/signup')
 
 
 class login_common(View):

@@ -1,13 +1,67 @@
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <title>Guest House App</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-        {% if request.user.is_authenticated %}
-            <p>成功！！！{{ user.get_username }}</p>
-        {% endif %}
-    </body>
-</html>
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-screen-xl mx-auto">
+    <img class="mt-8 mx-auto w-11/12" src="{% static 'booking/images/top1.png' %}" alt="">
+    <form class="flex justify-between mt-8 mx-12">
+        <!-- 目的地 -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="destination">
+              目的地
+            </label>
+            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="destination" name="destination">
+                <option value="" selected disabled>目的地を選択してください</option>
+                <option value="tokyo">東京</option>
+                <option value="osaka">大阪</option>
+                <option value="kyoto">京都</option>
+                <option value="hokkaido">北海道</option>
+                <option value="okinawa">沖縄</option>
+            </select>
+        </div>
+
+        <!-- チェックイン -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="check-in-date">
+              チェックイン
+            </label>
+            <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="check-in-date" name="check_in_date">
+        </div>
+
+        <!-- チェックアウト -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="check-out-date">
+              チェックアウト
+            </label>
+            <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="check-out-date" name="check_out_date">
+        </div>
+
+        <!-- 料金上限 -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="price-range">
+              料金上限
+            </label>
+            <input type="range" class="shadow border rounded w-full h-2 bg-gray-200 focus:outline-none focus:shadow-outline" id="price-range" name="price_range" min="1000" max="20000" step="500" value="10000" oninput="displayPriceRange(value);">
+            <span id="price-display" class="text-gray-700 text-lg">¥5,000</span>
+        </div>
+
+        <!-- 検索ボタン -->
+        <div class="mb-4 flex items-center">
+            <button type="submit" class="bg-rose-900 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                検索
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+<script>
+    function displayPriceRange(value) {
+      const priceDisplay = document.getElementById('price-display');
+      priceDisplay.textContent = `¥${Number(value).toLocaleString()}`;
+    }
+</script>
+{% endblock %}

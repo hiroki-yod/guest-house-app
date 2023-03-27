@@ -1,16 +1,94 @@
+{% extends "booking/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>Guest Signup</title>
-</head>
-<body>
-    <h1>Guest Signup</h1>
-    <form action="{% url 'signup_guest' %}" method="post">
+
+{% block content %}
+<div class="mx-auto max-w-screen-x py-8">
+    <div class="mx-auto max-w-lg text-center">
+      <h1 class="text-2xl font-bold sm:text-3xl">Guest Signup</h1>
+      {{ form.errors }}
+    </div>
+
+    <!-- 後でエラーメッセージを出すようにする -->
+    <form action="{% url 'signup_guest' %}" method="post" class="mx-auto mt-8 mb-0 max-w-md space-y-4">
     {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Signup"></p>
+
+        <!-- ユーザーネーム -->
+        <div>
+            <label for="id_username">ユーザーネーム</label>
+            <div class="relative">
+              <input
+                class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                type="text" name="username" maxlength="150" autofocus required id="id_username"
+                placeholder="Enter username"
+              />
+            </div>
+            <span class="text-xs text-gray-700">半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。</span>
+        </div>
+
+        <!-- メールアドレス -->
+        <div>
+            <label for="id_email">メールアドレス</label>
+            <div class="relative">
+              <input
+                class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                type="email" name="email" maxlength="254" id="id_email"
+                placeholder="Enter email"
+              />
+            </div>
+        </div>
+
+        <!-- パスワード -->
+        <div>
+            <label for="id_password1">パスワード</label>
+            <div class="relative">
+              <input
+                class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                type="password" name="password1" autocomplete="new-password" required id="id_password1"
+                placeholder="Enter password"
+              />
+            </div>
+            <span class="text-xs text-gray-700"><ul>
+                <li>・あなたの他の個人情報と似ているパスワードにはできません</li>
+                <li>・パスワードは最低 8 文字以上必要です</li>
+                <li>・よく使われるパスワードにはできません</li>
+                <li>・数字だけのパスワードにはできません</li>
+            </ul></span>
+        </div>
+
+        <!-- パスワード（確認用） -->
+        <div>
+          <label for="id_password2">パスワード(確認用)</label>
+            <div class="relative">
+              <input
+                class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                type="password" name="password2" autocomplete="new-password" required id="id_password2"
+                placeholder="Enter password again"
+              />
+            </div>
+            <span class="text-xs text-gray-700">確認のため、再度パスワードを入力してください。</span>
+        </div>
+
+        <!-- 生年月日 -->
+        <div>
+          <label for="id_birth_date">生年月日</label>
+          <div class="relative">
+            <input
+              class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+              type="text" name="birth_date" required id="id_birth_date"
+              placeholder="Enter password barth date"
+            />
+          </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="inline-block rounded-lg bg-rose-900 px-4 py-2 text-sm font-medium text-white"
+        >
+          Sign up
+        </button>
+      </div>
     </form>
-</body>
-</html>
+  </div>
+  
+{% endblock %}
