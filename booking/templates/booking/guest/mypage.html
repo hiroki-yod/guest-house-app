@@ -1,30 +1,35 @@
+{% extends "booking/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>マイページ</title>
-</head>
-<body>
-    <h1>ようこそ、{{ user.guestuser.username }}さん</h1>
-    <a href="/facility/index">施設検索に進む</a>
-    <h2>予約した施設一覧</h2>
-    {% for reservation in reservations %}
-        <p>
-            <li>施設名:{{reservation.room.facility.name}}</li>
-            <li>部屋名:{{reservation.room.room_name}}</li>
-            <li>期間：{{reservation.check_in_date}}から{{reservation.check_out_date}}</li>
-        </p>
-    {% endfor %}
-    <h2>予約したイベント一覧</h2>
-    {% for event in events %}
-        <p>
-            <li>施設名:{{event.facility.name}}</li>
-            <li>イベント名：{{event.event_name}}</li>
-            <li>イベント内容：{{event.event_detail}}</li>
-            <li>期間：{{event.begin_date}}から{{event.end_date}}</li>
-        </p>
-    {% endfor %}
 
-</body>
-</html>
+{% block content %}
+<div class="max-w-screen-xl mx-auto py-8">
+    <div class="mx-auto max-w-lg text-center">
+      <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">MyPage</h1>
+    </div>
+    <div class="mx-12 mt-6">
+        <h2 class="text-xl font-bold mb-4">ようこそ、{{ user.guestuser.username }}さん</h2>
+        <div class="mb-4">
+        <h2 class="text-xl font-bold">宿泊予約一覧</h2>
+        {% for reservation in reservations %}
+        <h3 class="mt-2 font-semibold text-rose-900">予約{{ forloop.counter }}</h3>
+            <ul class="ml-4">
+                <li>施設名: {{reservation.room.facility.name}}</li>
+                <li>部屋名: {{reservation.room.room_name}}</li>
+                <li>期間： {{reservation.check_in_date}}から{{reservation.check_out_date}}</li>
+            </ul>
+        {% endfor %}
+        </div>
+        <div class="mb-4">
+        <h2 class="text-xl font-bold">イベント予約一覧</h2>
+        {% for event in events %}
+            <p>
+                <li>施設名:{{event.facility.name}}</li>
+                <li>イベント名：{{event.event_name}}</li>
+                <li>イベント内容：{{event.event_detail}}</li>
+                <li>期間：{{event.begin_date}}から{{event.end_date}}</li>
+            </p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

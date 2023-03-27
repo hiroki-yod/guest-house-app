@@ -1,39 +1,86 @@
+{% extends "booking/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>facility index</title>
-</head>
-<body>
-    <h1>facility index</h1>
-    <form action = "/facility/index/", method = POST>
-        {% csrf_token %}
-        <p>
-            <label for="search_name">名前検索(スペース区切り、and検索)</label>
-            <input type="text" id = "search_name" name = "words" value="{{words}}">
-        </p>
-        <p>
-            <label for="search_text">地名検索(スペース区切り、or検索)</label>
-            <input type="text" id = "search_place" name = "places" value="{{places}}">
-        </p>
-        <p>
-            <input type="radio" id = "is_date_search_true" name = "is_date_search" value="1">
-            <label for="is_date_search_true">時間検索あり</label>
-            <input type="radio" id = "is_date_search_false" name = "is_date_search" value="0" checked>
-            <label for="is_date_search_false"  >時間検索なし</label>
-        </p>
-        <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_checkin }}" >から</p>
-        <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_checkout }}" min =  "{{ now }}">
-        までの日程に空きがある施設</p>
-        <button type="submit">検索</button>
+
+{% block content %}
+<div class="max-w-screen-xl mx-auto py-8">
+    <div class="mx-auto max-w-lg text-center">
+      <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">Search</h1>
+    </div>
+    <form action="{% url 'facility_index' %}" method="get" class="flex justify-between my-8 mx-12">
+        <!-- 目的地 -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="destination">
+              目的地
+            </label>
+            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="destination" name="destination">
+                <option value="" selected disabled>目的地を選択してください</option>
+                <option value="tokyo">東京</option>
+                <option value="osaka">大阪</option>
+                <option value="kyoto">京都</option>
+                <option value="hokkaido">北海道</option>
+                <option value="okinawa">沖縄</option>
+            </select>
+        </div>
+
+        <!-- チェックイン -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="check-in-date">
+              チェックイン
+            </label>
+            <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="check-in-date" name="check_in_date">
+        </div>
+
+        <!-- チェックアウト -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="check-out-date">
+              チェックアウト
+            </label>
+            <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="check-out-date" name="check_out_date">
+        </div>
+
+        <!-- 料金上限 -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-lg mb-2" for="price-range">
+              料金上限
+            </label>
+            <input type="range" class="shadow border rounded w-full h-2 bg-gray-200 focus:outline-none focus:shadow-outline" id="price-range" name="price_range" min="1000" max="20000" step="500" value="10000" oninput="displayPriceRange(value);">
+            <span id="price-display" class="text-gray-700 text-lg">¥5,000</span>
+        </div>
+
+        <!-- 検索ボタン -->
+        <div class="mb-4 flex items-center">
+            <button type="submit" class="bg-rose-900 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                検索
+            </button>
+        </div>
     </form>
-    <h1>検索結果</h1>
+
+    <!-- 検索結果一覧 -->
+    <div class="mx-12">
+    <div class="grid grid-cols-2 gap-6">
     {% for Facility in Facility_list %}
-       <li><a href="/facility/{{ Facility.uid }}">{{ Facility.name }}</a></li>
+        <a href="/facility/{{ Facility.uid }}">
+        <article class="overflow-hidden rounded-lg shadow transition hover:shadow-lg mb-6">
+            <img
+            alt="Office"
+            src="/media/{{ Facility.photo }}"
+            class="h-56 w-full object-cover"
+            />
+        
+            <div class="bg-white p-4 sm:p-6">
+        
+            
+                <h3 class="mt-0.5 text-xl">
+                    {{ Facility.name }}
+                </h3>
+            
+        
+            <p class="mt-2 text-sm leading-relaxed text-gray-500 line-clamp-3">
+                {{ Facility.bio }}
+            </p>
+            </div>
+        </article></a>
     {% endfor %}
-
-    <a href="/guest/mypage">戻る</a>
-
-</body>
-</html>
+    </div></div>
+</div>
+{% endblock %}

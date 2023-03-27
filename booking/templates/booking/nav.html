@@ -17,18 +17,24 @@
                 <a href="#" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">About</a>
               </li>
               <li>
-                <a href="#" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Search</a>
+                <a href="{% url 'facility_index' %}" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Search</a>
               </li>
               {% if request.user.is_authenticated %}
               <li>
-                <a href="#" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Logout</a>
+                <a href="{% url 'guest_mypage' %}" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">MyPage</a>
+              </li>
+              <li>
+                <form action="{% url 'logout' %}" method="post">
+                  {% csrf_token %}
+                  <button class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Logout</button>
+                </form>
               </li>
               {% else %}
               <li>
-                <a href="#" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Login</a>
+                <a href="{% url 'login' %}" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Login</a>
               </li>
               <li>
-                <a href="#" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Signup</a>
+                <a href="{% url 'signup_guest' %}" class="block pl-3 pr-4 text-white text-lg rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-900 md:p-0">Signup</a>
               </li>
               {% endif %}
             </ul>

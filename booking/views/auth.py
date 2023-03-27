@@ -15,7 +15,9 @@ class signup_host(View):
         form = auth.HostSignupForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('/login')
+            return redirect('/login')
+        else:
+            return redirect('/signup')
 
 
 class signup_guest(View):

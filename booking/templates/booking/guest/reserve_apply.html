@@ -1,20 +1,29 @@
-<!doctype html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>make reservation</title>
-</head>
-<body>
-    <h1>予約する</h1>
-    <form action="/reserve/save/" method="post">
-        {% csrf_token %}
-            <p>施設名：{{facility.name}}
-            <input type = "hidden" name="facility_uid" value = "{{facility.uid}}" required><p>
-            <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly required></p>
-            <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_date }}" min =  "{{ selected_date }}" max={{deadline}} required></p>
-            <p>ユーザー名：{{user.guestuser.username}}</p>
-        <button type="submit">予約を確定する</button>
-    </form>
-    <a href="/reserve/{{facility.uid}}/frame/index">戻る</a>
-</body>
-</html>
+{% extends "booking/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-screen-xl mx-auto py-8">
+    <div class="mx-auto max-w-lg text-center">
+      <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">予約手続</h1>
+    </div>
+    <div class="flex justify-between mt-16 mx-16">
+        <div class="w-3/5 mr-8">
+            <h2 class="text-2xl font-bold">{{ facility.name }}</h2>
+            <div class="mt-4">
+                <p>〒 {{ facility.post_code }}</p>
+                <p>{{ facility.address }}</p>
+            </div>
+            <form action="/reserve/save/" method="post" class="mt-4">
+                {% csrf_token %}
+                    <input type = "hidden" name="facility_uid" value = "{{facility.uid}}" required><p>
+                    <p>チェックイン日：<input type = "date" name="checkin" value = "{{ selected_date }}" readonly required></p>
+                    <!-- チェックアウト日の1日前までの予約では？ -->
+                    <p>チェックアウト日：<input type = "date" name="checkout" value = "{{ selected_date }}" min =  "{{ selected_date }}" max={{deadline}} required></p>
+                    <p>ユーザー名：{{user.guestuser.username}}</p>
+                <button class="mt-4 font-bold hover:text-rose-900" type="submit">予約を確定する</button>
+            </form>
+        </div>
+        <img class="w-2/5" src="/media/{{ facility.photo }}" alt="">
+    </div>
+</div>
+{% endblock %}

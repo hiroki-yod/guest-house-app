@@ -4,7 +4,7 @@
 {% block content %}
 <div class="max-w-screen-xl mx-auto">
     <img class="mt-8 mx-auto w-11/12" src="{% static 'booking/images/top1.png' %}" alt="">
-    <form class="flex justify-between mt-8 mx-12">
+    <form action="{% url 'facility_index' %}" method="get" class="flex justify-between my-8 mx-12">
         <!-- 目的地 -->
         <div class="mb-4">
             <label class="block text-gray-700 text-lg mb-2" for="destination">
