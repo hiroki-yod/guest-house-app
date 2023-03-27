@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import main, auth, host, guest, stripe
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import main, auth, host, guest
 
 
 urlpatterns = [
@@ -12,14 +15,13 @@ urlpatterns = [
     path('logout/', auth.logout_common.as_view(), name='logout'),
 
     #host.py
-    path('host/facility', host.facility_list.as_view(), name='facility_list'),
-    path('host/facility/register', host.facility_register.as_view(), name='facility_register'),
-    path('host/room/register', host.room_register.as_view(), name='room_register'),
-    path('host/event', host.event_list.as_view(), name='event_list'),
-    path('host/event/register', host.event_register.as_view(), name='event_register'),
+    path('host', host.host_index.as_view(), name='host_index'),                                     #TODO
+    path('host/facility/register', host.facility_register.as_view(), name='facility_register'),     #TODO
+    path('host/room/register', host.room_register.as_view(), name='room_register'),                 #TODO
+    path('host/event/register', host.event_register.as_view(), name='event_register'),              #TODO
 
     #guest.py
-    path('guest/mypage/', guest.guest_mypage.as_view(), name='guest_mypage'),
+    path('mypage/', guest.guest_mypage.as_view(), name='guest_mypage'),
     path('facility/index/', guest.facility_index.as_view(), name='facility_index'),
     path('facility/<uuid:facility_id>/', guest.facility_detail.as_view(), name='facility_detail'),
     path('reserve/<uuid:selected_facility_id>/frame/index', guest.reserve_frame_index.as_view(), name='reserve_frame_index'),
@@ -32,3 +34,5 @@ urlpatterns = [
     path("stripe", stripe.ProductTopPageView.as_view(), name="product-top-page"),   
     path("create-checkout-session/<pk>/", stripe.CreateCheckoutSessionView.as_view(), name="create-checkout-session"),    # 個別商品決済画面
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

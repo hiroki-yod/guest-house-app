@@ -9,12 +9,22 @@ from ..decorators import host_login_required
 #ホストでログインしている場合のみ表示するための関数をdecorators.pyに定義した
 #@method_decorator(host_login_required)で認証できる
 
-class facility_list(View):
+class host_index(View):
     @method_decorator(host_login_required)
     def get(self, request):
         facilities = Facility.objects.filter(host=request.user.hostuser)
-        param = {'facilities': facilities}
-        return render(request, "booking/host/facility/list.html", param)
+        param = {'facilities': []}
+
+        for facility in facilities:
+            events = facility.event_set.all()
+            rooms = facility.room_set.all()
+            facility_data = {
+                'facility': facility,
+                'events': events,
+                'rooms': rooms
+            }
+            param['facilities'].append(facility_data)
+        return render(request, "booking/host/index.html", param)
 
 
 class facility_register(View):
@@ -45,7 +55,7 @@ class facility_register(View):
                 host = host
             )
             facility.save()
-        return redirect('/')
+        return redirect('/host')
 
 class room_register(View):
     @method_decorator(host_login_required)
@@ -71,19 +81,14 @@ class room_register(View):
                     room = room
                 )
                 reservation_frame.save()
-        return redirect('/')
-class event_list(View):
-    @method_decorator(host_login_required)
-    def get(self, request):
-        events = Event.objects.filter(host=request.user.hostuser)
-        param = {'events': events}
-        return render(request, "booking/host/event/list.html", param)
+        return redirect('/host')
 
 
 class event_register(View):
     @method_decorator(host_login_required)
     def get(self, request):
         form = EventForm()
+        form.fields['facility'].queryset = Facility.objects.filter(host=request.user.hostuser)
         param = {'form': form}
         return render(request, "booking/host/event/register.html", param)
     
@@ -112,4 +117,5 @@ class event_register(View):
                 max_participants = max_participants, 
             )
             event.save()
-        return redirect('/')
+        print(form.errors)
+        return redirect('/host')

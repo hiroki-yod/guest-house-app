@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 #django-environの設定
-import environ
+import os, environ
 env = environ.Env()
 env.read_env('.env')
 
@@ -141,8 +141,13 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+
 # Stripeのパブリックキー
 STRIPE_PUBLIC_KEY = 'pk_test_51MpkFzINPfbKurYBrmvfurPkYOp50vwQNZATK6Yfn4utJF0ShNA67Duo3hzVEDoJgbmbtYutgQSzSL6Fkxz7iUBH009ToMvQ9I'
 
 # Stripeのシークレットキー
 STRIPE_SECRET_KEY = 'sk_test_51MpkFzINPfbKurYBNVNrWPwL3itKmpaNYklOn8IP54hNDaWzqWZx6HShJl4CLmRp5AKLGaiplrkEizpNJKLwuaqU002FYi8jAl'
+
+#MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = 'media/'

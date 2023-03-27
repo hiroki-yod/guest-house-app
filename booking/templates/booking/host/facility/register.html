@@ -1,16 +1,93 @@
 {% load static %}
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>Facility Register</title>
-</head>
-<body>
-    <h1>Facility Register</h1>
-    <form action="{% url 'facility_register' %}" method="post">
-    {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Register"></p>
-    </form>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" type="image/png" href="{% static 'booking/images/logo.png' %}"/>
+        <title>Guest House App</title>
+    </head>
+    {% include "booking/nav_host.html" %}
+    <body>
+        <div class="mx-auto max-w-screen-x py-8">
+            <div class="mx-auto max-w-lg text-center">
+              <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">Facility Register</h1>
+            </div>
+        
+            <form action="{% url 'facility_register' %}" method="post" class="mx-auto mt-8 mb-0 max-w-md space-y-4">
+            {% csrf_token %}
+        
+                <!-- Facility Name -->
+                <div>
+                    <label for="id_facility_name">Name</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        type="text" name="name" maxlength="100" required id="id_name"
+                        placeholder="Enter name"
+                        />
+                    </div>
+                </div>
+
+                <!-- Post Code -->
+                <div>
+                    <label for="id_post_code">Post Code</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        type="text" name="post_code" maxlength="7" required id="id_post_code"
+                        placeholder="Enter post code"
+                        />
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label for="id_address">Address</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        type="text" name="address" maxlength="200" required id="id_address"
+                        placeholder="Enter address"
+                        />
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div>
+                    <label for="id_bio">Bio</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        type="text" name="bio" maxlength="400" id="id_bio"
+                        placeholder="Enter bio"
+                        />
+                    </div>
+                </div>
+
+                <!-- Website -->
+                <div>
+                    <label for="id_website">Website</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        type="url" name="website" maxlength="200" id="id_website"
+                        placeholder="Enter URL"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button
+                      type="submit"
+                      class="inline-block rounded-lg bg-rose-900 px-4 py-2 text-sm font-medium text-white"
+                    >
+                      Register
+                    </button>
+                </div>
+            </form>
+        
+        </div>
+    </body>
 </html>

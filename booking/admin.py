@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CommonUser, HostUser, GuestUser, Facility, Room, ReservationFrame, Reservation, Price
+from .models import CommonUser, HostUser, GuestUser, Facility, Room, ReservationFrame, Reservation, Event, EventApplication, Price
 
 class PriceInlineAdmin(admin.TabularInline):
     model = Price
@@ -16,3 +16,4 @@ admin.site.register(Room)
 admin.site.register(ReservationFrame, ProductAdmin)
 admin.site.register(Reservation)
 admin.site.register(Price)
+admin.site.register(Event)

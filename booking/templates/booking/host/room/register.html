@@ -1,16 +1,49 @@
 {% load static %}
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>Room Register</title>
-</head>
-<body>
-    <h1>Room Register</h1>
-    <form action="{% url 'room_register' %}" method="post">
-    {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Register"></p>
-    </form>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" type="image/png" href="{% static 'booking/images/logo.png' %}"/>
+        <title>Guest House App</title>
+    </head>
+    {% include "booking/nav_host.html" %}
+    <body>
+        <div class="mx-auto max-w-screen-x py-8">
+            <div class="mx-auto max-w-lg text-center">
+              <h1 class="text-2xl font-bold text-rose-900 sm:text-3xl">Room Register</h1>
+            </div>
+        
+            <form action="{% url 'room_register' %}" method="post" class="mx-auto mt-8 mb-0 max-w-md space-y-4">
+            {% csrf_token %}
+        
+                <!-- Room Name -->
+                <div>
+                    <label for="id_room_name">Room Name</label>
+                    <div class="relative">
+                        <input
+                        class="w-full rounded-lg border-2 border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                        input type="text" name="room_name" maxlength="100" required id="id_room_name"
+                        placeholder="Enter room_name"
+                        />
+                    </div>
+                </div>
+        
+                <!-- Facility -->
+                <label for="id_facility_name">Facility</label>
+                {{ form.facility }}
+
+                <div class="flex justify-end">
+                    <button
+                      type="submit"
+                      class="inline-block rounded-lg bg-rose-900 px-4 py-2 text-sm font-medium text-white"
+                    >
+                      Register
+                    </button>
+                </div>
+            </form>
+        
+        </div>
+    </body>
 </html>
